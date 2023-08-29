@@ -361,6 +361,26 @@ document.addEventListener("keydown", (event) => {
                 direction2 = "right";
             }
             break;
+        case "W":
+            if (direction2 !== "down") {
+                direction2 = "up";
+            }
+            break;
+        case "S":
+            if (direction2 !== "up") {
+                direction2 = "down";
+            }
+            break;
+        case "A":
+            if (direction2 !== "right") {
+                direction2 = "left";
+            }
+            break;
+        case "D":
+            if (direction2 !== "left") {
+                direction2 = "right";
+            }
+            break;
         case "i":
             if (direction3 !== "down") {
                 direction3 = "up";
@@ -377,6 +397,26 @@ document.addEventListener("keydown", (event) => {
             }
             break;
         case "l":
+            if (direction3 !== "left") {
+                direction3 = "right";
+            }
+            break;
+        case "I":
+            if (direction3 !== "down") {
+                direction3 = "up";
+            }
+            break;
+        case "K":
+            if (direction3 !== "up") {
+                direction3 = "down";
+            }
+            break;
+        case "J":
+            if (direction3 !== "right") {
+                direction3 = "left";
+            }
+            break;
+        case "L":
             if (direction3 !== "left") {
                 direction3 = "right";
             }
