@@ -198,11 +198,17 @@ function restartGame() {
 
     direction1 = "left";
     direction2 = "right";
+    direction3 = "up";
+    direction4 = "down";
     gameOver = false;
     snake1Speed = 200;
     snake2Speed = 200;
+    snake3Speed = 200;
+    snake4Speed = 200;
     snake1Score = 0;
     snake2Score = 0;
+    snake3Score = 0;
+    snake4Scire = 0;
     generateFood();
     hideGameOverScreen();
     gameLoop();
