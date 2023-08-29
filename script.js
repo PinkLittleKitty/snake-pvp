@@ -297,15 +297,15 @@ function showGameOverScreen() {
 
     if (numPlayers === 2)
     {
-        gameOverTextElement.textContent ="Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score;
+        gameOverTextElement.textContent ="¡Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score;
     } 
     else if (numPlayers === 3)
     {
-        gameOverTextElement.textContent ="Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score;
+        gameOverTextElement.textContent ="¡Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score;
     } 
     else 
     {
-        gameOverTextElement.textContent ="Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score + "\nPuntuación del Rosa: " + snake4Score;
+        gameOverTextElement.textContent ="¡Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score + "\nPuntuación del Rosa: " + snake4Score;
     }
     document.getElementById("game-over").style.display = "block";
     const restartButton = document.getElementById("restart-button");
