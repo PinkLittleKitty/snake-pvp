@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+}
+
+#game-board {
+    width: 100vw;
+    height: 100vh;
+    border: 1px solid white;
+    position: relative;
+}
+
+.snake {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
+
+.food {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    position: absolute;
+}
+
+.greenHead {
+    background-image: url('images/greenHead.png');
+}
+
+.greenBody {
+    background-image: url('images/greenBody.png');
+}
+
+.blueHead {
+    background-image: url('images/blueHead.png');
+}
+
+.blueBody {
+    background-image: url('images/blueBody.png');
+}
+
+.redHead {
+background-image: url('images/redHead.png');
+}
+
+.redBody {
+background-image: url('images/redBody.png');
+}
+
+.grid-line {
+    position: absolute;
+    background-color: gray;
+}
+#game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+}
+#restart-button {
+    display: none;
+    margin-top: 20px;
+    cursor: pointer;
+}
