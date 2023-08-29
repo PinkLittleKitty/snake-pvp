@@ -1,7 +1,7 @@
 const gameBoard = document.getElementById("game-board");
 const gridSize = 30;
-let snake1 = [{x: Math.floor(gridSize * 6 / gridSize) * gridSize, y: Math.floor(gridSize * 6 / gridSize) * gridSize}];
-let snake2 = [{x: Math.floor(gridSize * 14 / gridSize) * gridSize, y: Math.floor(gridSize * 14 / gridSize) * gridSize}];
+let snake1 = [{x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
+let snake2 = [{x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
 let direction1 = "left";
 let direction2 = "right";
 let gameOver = false;
@@ -126,8 +126,8 @@ function draw() {
 document.getElementById("restart-button").addEventListener("click", restartGame);
 
 function restartGame() {
-    snake1 = [{x: Math.floor(gridSize * 6 / gridSize) * gridSize, y: Math.floor(gridSize * 6 / gridSize) * gridSize, class: ""}];
-    snake2 = [{x: Math.floor(gridSize * 14 / gridSize) * gridSize, y: Math.floor(gridSize * 14 / gridSize) * gridSize, class: ""}];
+   let snake1 = [{x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
+let snake2 = [{x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
     direction1 = "left";
     direction2 = "right";
     gameOver = false;
