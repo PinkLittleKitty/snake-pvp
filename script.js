@@ -271,7 +271,18 @@ function gameLoop() {
 
 function showGameOverScreen() {
     const gameOverTextElement = document.getElementById("game-over-text");
-    gameOverTextElement.textContent = "¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "2\nPuntuación del Azul: " + snake2Score + "3\nPuntuación del Amarillo: " + snake3Score + "4\nPuntuación del Rosa: " + snake4Score;;
+    if (numPlayers === 2)
+    {
+        gameOverTextElement.textContent ="¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score;
+    } 
+    else if (numPlayers === 3)
+    {
+        gameOverTextElement.textContent ="¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score;
+    } 
+    else 
+    {
+        gameOverTextElement.textContent ="¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score + "\nPuntuación del Rosa: " + snake4Score;
+    }
     document.getElementById("game-over").style.display = "block";
     const restartButton = document.getElementById("restart-button");
     restartButton.style.display = "block";

@@ -108,4 +108,9 @@ background-image: url('images/redBody.png');
     display: none;
     margin-top: 20px;
     cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20px;
+    border-radius: 10px;
 }
