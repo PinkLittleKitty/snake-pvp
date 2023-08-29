@@ -126,8 +126,16 @@ function draw() {
 document.getElementById("restart-button").addEventListener("click", restartGame);
 
 function restartGame() {
-    let snake1 =[{x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
-    let snake2 = [{x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
+    snake1 = [{
+        x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize,
+        y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize,
+        class: ""
+    }];
+    snake2 = [{
+        x: Math.floor(gridSize * 3 / gridSize) * gridSize,
+        y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize,
+        class: ""
+    }];
     direction1 = "left";
     direction2 = "right";
     gameOver = false;
@@ -138,7 +146,6 @@ function restartGame() {
     generateFood();
     hideGameOverScreen();
     gameLoop();
-}
 
 function hideGameOverScreen() {
     document.getElementById("game-over").style.display = "none";
@@ -201,6 +208,11 @@ function showGameOverScreen() {
 gameLoop();
 
 document.addEventListener("keydown", (event) => {
+    if (gameOver && event.key === "r") {
+        restartGame();
+        return;
+    }
+
     switch(event.key) {
         case "ArrowUp":
             if (direction1 !== "down") {
