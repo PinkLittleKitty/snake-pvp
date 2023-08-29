@@ -270,18 +270,30 @@ function gameLoop() {
 }
 
 function showGameOverScreen() {
+    let whoHit = " ";
     const gameOverTextElement = document.getElementById("game-over-text");
+
+    if (snake1[0].class === "redHead") {
+        whoHit = "El Jugador Verde chocó!";
+    } else if (snake2[0].class === "redHead") {
+        whoHit = "El Jugador Azul chocó!";
+    } else if (snake3[0].class === "redHead") {
+        whoHit = "El Jugador Amarillo chocó!";
+    } else if (snake4[0].class === "redHead") {
+        whoHit = "El Jugador Rosa chocó!";
+    }
+
     if (numPlayers === 2)
     {
-        gameOverTextElement.textContent ="¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score;
+        gameOverTextElement.textContent ="Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score;
     } 
     else if (numPlayers === 3)
     {
-        gameOverTextElement.textContent ="¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score;
+        gameOverTextElement.textContent ="Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score;
     } 
     else 
     {
-        gameOverTextElement.textContent ="¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score + "\nPuntuación del Rosa: " + snake4Score;
+        gameOverTextElement.textContent ="Fin del Juego - " + whoHit + "\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score + "\nPuntuación del Amarillo: " + snake3Score + "\nPuntuación del Rosa: " + snake4Score;
     }
     document.getElementById("game-over").style.display = "block";
     const restartButton = document.getElementById("restart-button");
