@@ -150,9 +150,15 @@ function increaseSpeedAndScore(snake, score) {
     if (snake === snake1) {
         snake1Speed = Math.max(50, 200 - (score * 10));
         snake1Score = score;
-    } else {
+    } else if (snake === snake2) {
         snake2Speed = Math.max(50, 200 - (score * 10));
         snake2Score = score;
+    } else if (snake === snake3) {
+        snake3Speed = Math.max(50, 200 - (score * 10));
+        snake3Score = score;
+    } else if (snake === snake4) {
+        snake4Speed = Math.max(50, 200 - (score * 10));
+        snake4Score = score;
     }
 }
 
