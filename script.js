@@ -38,7 +38,7 @@ function startGame(selectedPlayers) {
     numPlayers = selectedPlayers;
     gameStarted = true;
 
-    // Initialize snake positions based on the number of players
+
     snake1 = [{ x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "" }];
     snake2 = [{ x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: ""}];
 
@@ -50,11 +50,11 @@ function startGame(selectedPlayers) {
         snake4 = [{ x: startTopCenterX, y: startTopCenterY, class: "pinkHead" }];
     }
 
-    // Hide player buttons and display game board
+
     document.getElementById("player-buttons").style.display = "none";
     document.getElementById("game-board").style.display = "block";
 
-    // Call the game loop only when the button is clicked
+
     gameLoop();
 }
 
@@ -77,7 +77,7 @@ function generateFood() {
 function checkCollision(snake) {
     const head = snake[0];
 
-    // Check collision with the body of the same snake
+
     for (let i = 1; i < snake.length; i++) {
         if (snake[i].x === head.x && snake[i].y === head.y) {
             gameOver = true;
@@ -89,7 +89,6 @@ function checkCollision(snake) {
         }
     }
 
-    // Check collision with other players' snakes
     for (const otherSnake of [snake1, snake2, snake3, snake4]) {
         if (otherSnake !== snake) {
             for (const segment of otherSnake) {
@@ -105,7 +104,6 @@ function checkCollision(snake) {
         }
     }
 
-    // Check collision with game board boundaries
     if (head.x < 0 || head.x >= gameBoard.offsetWidth || head.y < 0 || head.y >= gameBoard.offsetHeight) {
         gameOver = true;
         for (let j = 0; j < snake.length; j++) {
@@ -273,7 +271,7 @@ function gameLoop() {
 
 function showGameOverScreen() {
     const gameOverTextElement = document.getElementById("game-over-text");
-    gameOverTextElement.textContent = "Fin del Juego!\nPuntuación del Verde: " + snake1Score + "\nPuntuación del Azul: " + snake2Score;
+    gameOverTextElement.textContent = "¡Fin del Juego! \nPuntuación del Verde: " + snake1Score + "2\nPuntuación del Azul: " + snake2Score + "3\nPuntuación del Amarillo: " + snake3Score + "4\nPuntuación del Rosa: " + snake4Score;;
     document.getElementById("game-over").style.display = "block";
     const restartButton = document.getElementById("restart-button");
     restartButton.style.display = "block";
