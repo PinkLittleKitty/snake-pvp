@@ -1,16 +1,63 @@
 const gameBoard = document.getElementById("game-board");
 const gridSize = 30;
-let snake1 =[{x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
+let snake1 = [{x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
 let snake2 = [{x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize}];
+let snake3 = [];
+let snake4 = [];
 let direction1 = "left";
 let direction2 = "right";
+let direction3 = "up";
+let direction4 = "down";
 let gameOver = false;
 let snake1Speed = 200;
 let snake2Speed = 200;
+let snake3Speed = 200;
+let snake4Speed = 200;
 let snake1Score = 0;
 let snake2Score = 0;
+let snake3Score = 0;
+let snake4Score = 0;
+let numPlayers = 0;
+let gameStarted = false;
 
 let food = generateRandomFoodPosition();
+
+const screenHeight = window.innerHeight;
+const startX = Math.floor(gridSize / 2);
+const startY = Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize;
+const startBottomCenterX = Math.floor(gameBoard.offsetWidth / 2 / gridSize) * gridSize;
+const startBottomCenterY = Math.floor(screenHeight / gridSize) * gridSize - gridSize;
+const startTopCenterX = Math.floor(gameBoard.offsetWidth / 2 / gridSize) * gridSize;
+    const startTopCenterY = gridSize;
+
+document.getElementById("two-players").addEventListener("click", () => startGame(2));
+document.getElementById("three-players").addEventListener("click", () => startGame(3));
+document.getElementById("four-players").addEventListener("click", () => startGame(4));
+
+function startGame(selectedPlayers) {
+    numPlayers = selectedPlayers;
+    gameStarted = true;
+
+    // Initialize snake positions based on the number of players
+    snake1 = [{ x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "" }];
+    snake2 = [{ x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: ""}];
+
+    if (numPlayers >= 3) {
+        snake3 = [{ x: startBottomCenterX, y: startBottomCenterY, class: "" }];
+    }
+
+    if (numPlayers === 4) {
+        snake4 = [{ x: startTopCenterX, y: startTopCenterY, class: "pinkHead" }];
+    }
+
+    // Hide player buttons and display game board
+    document.getElementById("player-buttons").style.display = "none";
+    document.getElementById("game-board").style.display = "block";
+
+    // Call the game loop only when the button is clicked
+    gameLoop();
+}
+
 
 function generateRandomFoodPosition() {
     const maxX = Math.floor(gameBoard.offsetWidth / gridSize);
@@ -30,7 +77,7 @@ function generateFood() {
 function checkCollision(snake) {
     const head = snake[0];
 
-    // Checkear colisión con el cuerpo de la serpiente
+    // Check collision with the body of the same snake
     for (let i = 1; i < snake.length; i++) {
         if (snake[i].x === head.x && snake[i].y === head.y) {
             gameOver = true;
@@ -38,21 +85,27 @@ function checkCollision(snake) {
                 snake[j].class = "redBody";
             }
             snake[0].class = "redHead";
+            return;
         }
     }
 
-    const otherSnake = snake === snake1 ? snake2 : snake1;
-    for (const segment of otherSnake) {
-        if (segment.x === head.x && segment.y === head.y) {
-            gameOver = true;
-            for (let j = 0; j < snake.length; j++) {
-                snake[j].class = "redBody";
+    // Check collision with other players' snakes
+    for (const otherSnake of [snake1, snake2, snake3, snake4]) {
+        if (otherSnake !== snake) {
+            for (const segment of otherSnake) {
+                if (segment.x === head.x && segment.y === head.y) {
+                    gameOver = true;
+                    for (let j = 0; j < snake.length; j++) {
+                        snake[j].class = "redBody";
+                    }
+                    otherSnake[0].class = "redHead";
+                    return;
+                }
             }
-            otherSnake[0].class = "redHead";
         }
     }
 
-    // Checkear colisión con el borde
+    // Check collision with game board boundaries
     if (head.x < 0 || head.x >= gameBoard.offsetWidth || head.y < 0 || head.y >= gameBoard.offsetHeight) {
         gameOver = true;
         for (let j = 0; j < snake.length; j++) {
@@ -115,6 +168,14 @@ function draw() {
         drawSnakeSegment(segment, "snake2", index === 0 ? "blueHead" : "blueBody");
     });
 
+    snake3.forEach((segment, index) => {
+        drawSnakeSegment(segment, "snake3", index === 0 ? "yellowHead" : "yellowBody");
+    });
+
+    snake4.forEach((segment, index) => {
+        drawSnakeSegment(segment, "snake4", index === 0 ? "pinkHead" : "pinkBody");
+    });
+
     const foodElement = document.createElement("div");
     foodElement.className = "food";
     foodElement.style.left = food.x + "px";
@@ -126,16 +187,17 @@ function draw() {
 document.getElementById("restart-button").addEventListener("click", restartGame);
 
 function restartGame() {
-    snake1 = [{
-        x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize,
-        y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize,
-        class: ""
-    }];
-    snake2 = [{
-        x: Math.floor(gridSize * 3 / gridSize) * gridSize,
-        y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize,
-        class: ""
-    }];
+    snake1 = [{ x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "" }];
+    snake2 = [{ x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: ""}];
+
+    if (numPlayers >= 3) {
+        snake3 = [{ x: startBottomCenterX, y: startBottomCenterY, class: "" }];
+    }
+
+    if (numPlayers === 4) {
+        snake4 = [{x: startTopCenterX, y: startTopCenterY, class: "" }];
+    }
+
     direction1 = "left";
     direction2 = "right";
     gameOver = false;
@@ -146,6 +208,7 @@ function restartGame() {
     generateFood();
     hideGameOverScreen();
     gameLoop();
+}
 
 function hideGameOverScreen() {
     document.getElementById("game-over").style.display = "none";
@@ -188,8 +251,19 @@ function drawSnakeSegment(segment, className, imageClass) {
 
 function gameLoop() {
     if (!gameOver) {
-        updateSnake(snake1, direction1, snake1Speed, snake1Score);
-        updateSnake(snake2, direction2, snake2Speed, snake2Score);
+        if (numPlayers === 2) {
+            updateSnake(snake1, direction1, snake1Speed, snake1Score);
+            updateSnake(snake2, direction2, snake2Speed, snake2Score);
+        } else if (numPlayers === 3) {
+            updateSnake(snake1, direction1, snake1Speed, snake1Score);
+            updateSnake(snake2, direction2, snake2Speed, snake2Score);
+            updateSnake(snake3, direction3, snake3Speed, snake3Score);
+        } else if (numPlayers === 4) {
+            updateSnake(snake1, direction1, snake1Speed, snake1Score);
+            updateSnake(snake2, direction2, snake2Speed, snake2Score);
+            updateSnake(snake3, direction3, snake3Speed, snake3Score);
+            updateSnake(snake4, direction4, snake4Speed, snake4Score);
+        }
         draw();
         setTimeout(gameLoop, 150);
     } else {
@@ -205,7 +279,7 @@ function showGameOverScreen() {
     restartButton.style.display = "block";
 }
 
-gameLoop();
+//gameLoop();
 
 document.addEventListener("keydown", (event) => {
     if (gameOver && event.key === "r") {
@@ -213,7 +287,7 @@ document.addEventListener("keydown", (event) => {
         return;
     }
 
-    switch(event.key) {
+    switch (event.key) {
         case "ArrowUp":
             if (direction1 !== "down") {
                 direction1 = "up";
@@ -252,6 +326,46 @@ document.addEventListener("keydown", (event) => {
         case "d":
             if (direction2 !== "left") {
                 direction2 = "right";
+            }
+            break;
+        case "i":
+            if (direction3 !== "down") {
+                direction3 = "up";
+            }
+            break;
+        case "k":
+            if (direction3 !== "up") {
+                direction3 = "down";
+            }
+            break;
+        case "j":
+            if (direction3 !== "right") {
+                direction3 = "left";
+            }
+            break;
+        case "l":
+            if (direction3 !== "left") {
+                direction3 = "right";
+            }
+            break;
+        case "8":
+            if (direction4 !== "down") {
+                direction4 = "up";
+            }
+            break;
+        case "5":
+            if (direction4 !== "up") {
+                direction4 = "down";
+            }
+            break;
+        case "4":
+            if (direction4 !== "right") {
+                direction4 = "left";
+            }
+            break;
+        case "6":
+            if (direction4 !== "left") {
+                direction4 = "right";
             }
             break;
     }
