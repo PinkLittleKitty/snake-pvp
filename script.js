@@ -39,16 +39,30 @@ function startGame(selectedPlayers) {
     gameStarted = true;
 
 
-    snake1 = [{ x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "" }];
-    snake2 = [{ x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: ""}];
+    snake1 = [
+        { x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "greenHead" },
+        { x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 2) / gridSize) * gridSize, y: startY, class: "greenTail" }
+    ];
+
+    snake2 = [
+        { x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: "blueHead" },
+        { x: Math.floor(gridSize * 4 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: "blueTail" }
+    ];
 
     if (numPlayers >= 3) {
-        snake3 = [{ x: startBottomCenterX, y: startBottomCenterY, class: "" }];
+        snake3 = [
+            { x: startBottomCenterX, y: startBottomCenterY, class: "redHead" },
+            { x: startBottomCenterX, y: startBottomCenterY + gridSize, class: "redTail" }
+        ];
     }
 
     if (numPlayers === 4) {
-        snake4 = [{ x: startTopCenterX, y: startTopCenterY, class: "pinkHead" }];
+        snake4 = [
+            { x: startTopCenterX, y: startTopCenterY, class: "pinkHead" },
+            { x: startTopCenterX, y: startTopCenterY - gridSize, class: "pinkTail" }
+        ];
     }
+
 
 
     document.getElementById("player-buttons").style.display = "none";
@@ -117,9 +131,12 @@ function updateSnake(snake, direction, speed, score) {
     if (gameOver) {
         return;
     }
-    
-    const head = {...snake[0]};
-    switch(direction) {
+
+    const prevDirection = direction;
+    const prevHeadPosition = { ...snake[0] };
+
+    const head = { ...snake[0] };
+    switch (direction) {
         case "up":
             head.y -= gridSize;
             break;
@@ -133,7 +150,25 @@ function updateSnake(snake, direction, speed, score) {
             head.x += gridSize;
             break;
     }
-    
+
+    const directionChanged = prevDirection !== direction;
+    if (directionChanged) {
+        console.log("Direction changed:", prevDirection, "->", direction);
+
+        const cornerClass = getCornerClass(prevDirection, direction);
+        if (cornerClass) {
+            console.log("Adding corner segment with class:", cornerClass);
+
+            const cornerSegment = {
+                x: prevHeadPosition.x,
+                y: prevHeadPosition.y,
+                class: cornerClass
+            };
+
+            snake.splice(1, 0, cornerSegment);
+        }
+    }
+
     snake.unshift(head);
     if (head.x === food.x && head.y === food.y) {
         generateFood();
@@ -142,7 +177,109 @@ function updateSnake(snake, direction, speed, score) {
         snake.pop();
     }
 
+    updateTailClasses(snake, direction);
+
     checkCollision(snake);
+}
+
+function getCornerClass(prevDirection, direction) {
+    if (
+        (prevDirection === "up" && direction === "right") ||
+        (prevDirection === "right" && direction === "up")
+    ) {
+        return "Corner_1";
+    } else if (
+        (prevDirection === "up" && direction === "left") ||
+        (prevDirection === "left" && direction === "up")
+    ) {
+        return "Corner_4";
+    } else if (
+        (prevDirection === "right" && direction === "down") ||
+        (prevDirection === "down" && direction === "right")
+    ) {
+        return "Corner_2";
+    } else if (
+        (prevDirection === "down" && direction === "left") ||
+        (prevDirection === "left" && direction === "down")
+    ) {
+        return "Corner_3";
+    }
+    return "";
+}
+
+
+
+function updateTailClasses(snake, prevDirection, currentDirection) {
+    for (let i = snake.length - 1; i > 0; i--) {
+        const tailSegment = snake[i];
+        const nextSegment = snake[i - 1];
+
+        if (i === snake.length - 1) {
+            // Update tail classes based on previous direction
+            tailSegment.class = getTailClass(prevDirection);
+        } else {
+            // Update tail classes based on the direction to the next segment
+            tailSegment.class = getTailClass(getDirectionToSegment(tailSegment, nextSegment));
+
+            // Check if it's a corner and update the class accordingly
+            if (i === 1) {
+                const cornerDirection = getCornerDirection(snake[0], tailSegment, nextSegment);
+                if (cornerDirection) {
+                    tailSegment.class = tailSegment.class.replace("Tail", "Corner_" + cornerDirection);
+                }
+            }
+        }
+    }
+}
+
+function getCornerDirection(prevHead, newHead, nextSegment) {
+    const prevDirection = getDirectionToSegment(prevHead, newHead);
+    const nextDirection = getDirectionToSegment(newHead, nextSegment);
+    console.log("Prev Direction:", prevDirection, "Next Direction:", nextDirection); // Debug log
+
+
+    // Determine the corner direction based on prev and next directions
+    if (prevDirection === "up" && nextDirection === "right") {
+        return "1";
+    } else if (prevDirection === "up" && nextDirection === "left") {
+        return "4";
+    } else if (prevDirection === "right" && nextDirection === "up") {
+        return "4";
+    } else if (prevDirection === "right" && nextDirection === "down") {
+        return "1";
+    } else if (prevDirection === "down" && nextDirection === "right") {
+        return "2";
+    } else if (prevDirection === "down" && nextDirection === "left") {
+        return "3";
+    } else if (prevDirection === "left" && nextDirection === "up") {
+        return "2";
+    } else if (prevDirection === "left" && nextDirection === "down") {
+        return "3";
+    }
+
+    return null;
+}
+
+
+function getTailClass(direction) {
+    switch (direction) {
+        case "up":
+            return "up";
+        case "down":
+            return "down";
+        case "left":
+            return "left";
+        case "right":
+            return "right";
+    }
+}
+
+function getDirectionToSegment(fromSegment, toSegment) {
+    if (fromSegment.x === toSegment.x) {
+        return fromSegment.y < toSegment.y ? "down" : "up";
+    } else {
+        return fromSegment.x < toSegment.x ? "right" : "left";
+    }
 }
 
 function increaseSpeedAndScore(snake, score) {
@@ -173,7 +310,7 @@ function draw() {
     });
 
     snake3.forEach((segment, index) => {
-        drawSnakeSegment(segment, "snake3", index === 0 ? "yellowHead" : "yellowBody");
+        drawSnakeSegment(segment, "snake3", index === 0 ? "redHead" : "redBody");
     });
 
     snake4.forEach((segment, index) => {
@@ -191,15 +328,28 @@ function draw() {
 document.getElementById("restart-button").addEventListener("click", restartGame);
 
 function restartGame() {
-    snake1 = [{ x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "" }];
-    snake2 = [{ x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: ""}];
+    snake1 = [
+        { x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 3) / gridSize) * gridSize, y: startY, class: "greenHead" },
+        { x: Math.floor(gridSize * (gameBoard.offsetWidth / gridSize - 2) / gridSize) * gridSize, y: startY, class: "greenTail" }
+    ];
+
+    snake2 = [
+        { x: Math.floor(gridSize * 3 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: "blueHead" },
+        { x: Math.floor(gridSize * 4 / gridSize) * gridSize, y: Math.floor(gameBoard.offsetHeight / 2 / gridSize) * gridSize, class: "blueTail" }
+    ];
 
     if (numPlayers >= 3) {
-        snake3 = [{ x: startBottomCenterX, y: startBottomCenterY, class: "" }];
+        snake3 = [
+            { x: startBottomCenterX, y: startBottomCenterY, class: "redHead" },
+            { x: startBottomCenterX, y: startBottomCenterY + gridSize, class: "redTail" }
+        ];
     }
 
     if (numPlayers === 4) {
-        snake4 = [{x: startTopCenterX, y: startTopCenterY, class: "" }];
+        snake4 = [
+            { x: startTopCenterX, y: startTopCenterY, class: "pinkHead" },
+            { x: startTopCenterX, y: startTopCenterY - gridSize, class: "pinkTail" }
+        ];
     }
 
     direction1 = "left";
@@ -214,7 +364,7 @@ function restartGame() {
     snake1Score = 0;
     snake2Score = 0;
     snake3Score = 0;
-    snake4Scire = 0;
+    snake4Score = 0;
     generateFood();
     hideGameOverScreen();
     gameLoop();
@@ -251,9 +401,77 @@ function drawGridLines() {
     }
 }
 
+const tailRotationDirections = []; // Array to store rotation directions for tail segments
+
 function drawSnakeSegment(segment, className, imageClass) {
     const snakeSegment = document.createElement("div");
     snakeSegment.className = "snake " + className + " " + imageClass + " " + segment.class;
+
+    if (segment === snake1[0]) {
+        snakeSegment.classList.add(direction1);
+    } else if (segment === snake2[0]) {
+        snakeSegment.classList.add(direction2);
+    } else if (segment === snake3[0]) {
+        snakeSegment.classList.add(direction3);
+    } else if (segment === snake4[0]) {
+        snakeSegment.classList.add(direction4);
+    }
+
+    if (segment.class.includes("Tail")) {
+        if (tailRotationDirections.length > 0) {
+            const storedDirection = tailRotationDirections.shift();
+            snakeSegment.classList.add(storedDirection);
+        }
+    }
+
+    if (segment === snake1[snake1.length - 1] && snake1.length > 1) {
+        snakeSegment.classList.add("greenTail");
+        if (segment.class.includes("Tail")) {
+            const headPosition = snake1[0]; // Store the head position
+            const tailDirection = getDirectionToSegment(segment, headPosition);
+            if (tailDirection === segment.class) {
+                // Only rotate if tail starts moving in the same direction as the head
+                tailRotationDirections.push(tailDirection);
+            }
+        }
+    } else if (segment === snake2[snake2.length - 1] && snake2.length > 1) {
+        snakeSegment.classList.add("blueTail");
+        if (segment.class.includes("Tail")) {
+            const headPosition = snake2[0]; // Store the head position
+            const tailDirection = getDirectionToSegment(segment, headPosition);
+            if (tailDirection === segment.class) {
+                // Only rotate if tail starts moving in the same direction as the head
+                tailRotationDirections.push(tailDirection);
+            }
+        }
+    } else if (segment === snake3[snake3.length - 1] && snake3.length > 1) {
+        snakeSegment.classList.add("redTail");
+        if (segment.class.includes("Tail")) {
+            const headPosition = snake3[0]; // Store the head position
+            const tailDirection = getDirectionToSegment(segment, headPosition);
+            if (tailDirection === segment.class) {
+                // Only rotate if tail starts moving in the same direction as the head
+                tailRotationDirections.push(tailDirection);
+            }
+        }
+    } else if (segment === snake4[snake4.length - 1] && snake4.length > 1) {
+        snakeSegment.classList.add("pinkTail");
+        if (segment.class.includes("Tail")) {
+            const headPosition = snake4[0]; // Store the head position
+            const tailDirection = getDirectionToSegment(segment, headPosition);
+            if (tailDirection === segment.class) {
+                // Only rotate if tail starts moving in the same direction as the head
+                tailRotationDirections.push(tailDirection);
+            }
+        }
+    }
+
+    // Check if the current segment is a corner
+    if (segment.class.includes("Corner")) {
+        const cornerDirection = segment.class.split("_")[1];
+        snakeSegment.classList.add(cornerDirection);
+    }
+
     snakeSegment.style.left = segment.x + "px";
     snakeSegment.style.top = segment.y + "px";
     gameBoard.appendChild(snakeSegment);

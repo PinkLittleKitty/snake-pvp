@@ -37,6 +37,26 @@ body {
     background-image: url('images/greenBody.png');
 }
 
+.greenTail {
+    background-image: url('images/greenTail.png');
+}
+
+.greenCorner_1 {
+    background-image: url('images/greenCorner_1.png');
+}
+
+.greenCorner_2 {
+    background-image: url('images/greenCorner_2.png');
+}
+
+.greenCorner_3 {
+    background-image: url('images/greenCorner_3.png');
+}
+
+.greenCorner_4 {
+    background-image: url('images/greenCorner_4.png');
+}
+
 .blueHead {
     background-image: url('images/blueHead.png');
 }
@@ -45,12 +65,24 @@ body {
     background-image: url('images/blueBody.png');
 }
 
-.yellowHead {
-    background-image: url('images/yellowHead.png');
+.blueTail {
+    background-image: url('images/blueTail.png');
 }
 
-.yellowBody {
-    background-image: url('images/yellowBody.png');
+.blueCorner_1 {
+    background-image: url('images/blueCorner_1.png');
+}
+
+.blueCorner_2 {
+    background-image: url('images/blueCorner_2.png');
+}
+
+.blueCorner_3 {
+    background-image: url('images/blueCorner_3.png');
+}
+
+.blueCorner_4 {
+    background-image: url('images/blueCorner_4.png');
 }
 
 .pinkHead {
@@ -61,12 +93,95 @@ body {
     background-image: url('images/pinkBody.png');
 }
 
+.pinkTail {
+    background-image: url('images/pinkTail.png');
+}
+
+.pinkCorner_1 {
+    background-image: url('images/pinkCorner_1.png');
+}
+
+.pinkCorner_2 {
+    background-image: url('images/pinkCorner_2.png');
+}
+
+.pinkCorner_3 {
+    background-image: url('images/pinkCorner_3.png');
+}
+
+.pinkCorner_4 {
+    background-image: url('images/pinkCorner_4.png');
+}
+
 .redHead {
-background-image: url('images/redHead.png');
+    background-image: url('images/redHead.png');
 }
 
 .redBody {
-background-image: url('images/redBody.png');
+    background-image: url('images/redBody.png');
+}
+
+.redTail {
+    background-image: url('images/redTail.png');
+}
+
+.redCorner_1 {
+    background-image: url('images/redCorner_1.png');
+}
+
+.redCorner_2 {
+    background-image: url('images/redCorner_2.png');
+}
+
+.redCorner_3 {
+    background-image: url('images/redCorner_3.png');
+}
+
+.redCorner_4 {
+    background-image: url('images/redCorner_4.png');
+}
+
+.greenHead, .blueHead, .redHead, .pinkHead {
+    /* Existing styles */
+    background-size: cover;
+}
+
+.greenTail, .blueTail, .redTail, .pinkTail {
+    /* Existing styles */
+    background-size: cover;
+}
+
+/* New styles for rotation */
+.greenHead.up, .blueHead.up, .redHead.up, .pinkHead.up {
+    transform: rotate(0deg);
+}
+
+.greenHead.down, .blueHead.down, .redHead.down, .pinkHead.down {
+    transform: rotate(180deg);
+}
+
+.greenHead.left, .blueHead.left, .redHead.left, .pinkHead.left {
+    transform: rotate(-90deg);
+}
+
+.greenHead.right, .blueHead.right, .redHead.right, .pinkHead.right {
+    transform: rotate(90deg);
+}
+
+.greenTail.up, .blueTail.up, .redTail.up, .pinkTail.up {
+    transform: rotate(0deg);
+}
+
+.greenTail.down, .blueTail.down, .redTail.down, .pinkTail.down {
+    transform: rotate(180deg);
+}
+
+.greenTail.left, .blueTail.left, .redTail.left, .pinkTail.left {
+    transform: rotate(-90deg);
+}
+
+.greenTail.right, .blueTail.right, .redTail.right, .pinkTail.right {
+    transform: rotate(90deg);
 }
 
 #grid-lines-x,
